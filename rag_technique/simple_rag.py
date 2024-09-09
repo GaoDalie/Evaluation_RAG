@@ -1,7 +1,10 @@
 import os
 import sys
 from dotenv import load_dotenv
-
+from langchain_community.document_loaders import PyPDFLoader
+from langchain_openai import OpenAIEmbeddings
+from langchain.vectorstores import FAISS
+from langchain.text_splitter import RecursiveCharacterTextSplitter
 
 sys.path.append(os.path.abspath(os.path.join(os.getcwd(), '..'))) # Add the parent directory to the path since we work with notebooks
 
@@ -11,6 +14,23 @@ load_dotenv()
 
 # Set the OpenAI API key environment variable
 os.environ["OPENAI_API_KEY"] = os.getenv('OPENAI_API_KEY')
+
+path = ""
+
+def replace_t_with_space(list_of_documents):
+    """
+    Replaces all tab characters ('\t') with spaces in the page content of each document.
+
+    Args:
+        list_of_documents: A list of document objects, each with a 'page_content' attribute.
+
+    Returns:
+        The modified list of documents with tab characters replaced by spaces.
+    """
+
+    for doc in list_of_documents:
+        doc.page_content = doc.page_content.replace('\t', ' ')  # Replace tabs with spaces
+    return list_of_documents
 
 def encode_pdf(path, chunk_size=1000, chunk_overlap=200):
     """
