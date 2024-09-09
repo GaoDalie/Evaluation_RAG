@@ -4,7 +4,6 @@ langchain
 langgraph
 langchain_core
 langchain_openai
-langchain_google_genai
 aiohappyeyeballs==2.4.0
 aiohttp==3.10.5
 aiosignal==1.3.1
