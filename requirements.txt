@@ -1,8 +1,8 @@
-langchain_community
+langchain-community==0.2.16
 streamlit
-langchain
+langchain==0.2.16
 langgraph
-langchain_core
+langchain-core==0.2.38
 langchain_openai
 aiohappyeyeballs==2.4.0
 aiohttp==3.10.5
@@ -35,7 +35,6 @@ dataclasses-json==0.6.7
 datasets==2.21.0
 debugpy==1.8.5
 decorator==5.1.1
-deepeval==1.1.6
 Deprecated==1.2.14
 dill==0.3.8
 dirtyjson==1.0.8
@@ -169,9 +168,6 @@ requests==2.32.3
 rich==13.8.0
 s3transfer==0.10.2
 safetensors==0.4.5
-scikit-learn==1.5.1
-scipy==1.14.1
-sentence-transformers==3.0.1
 sentry-sdk==2.13.0
 shellingham==1.5.4
 six==1.16.0
@@ -187,7 +183,7 @@ stack-data==0.6.3
 striprtf==0.0.26
 sympy==1.13.2
 tabulate==0.9.0
-tenacity==8.4.2
+tenacity>=8.4.1,<9.0.0
 thinc==8.2.5
 threadpoolctl==3.5.0
 tiktoken==0.7.0
@@ -212,4 +208,7 @@ wrapt==1.16.0
 xxhash==3.5.0
 yarl==1.10.0
 zipp==3.20.1
-graphrag==0.3.2
+scipy>=1.12.0,<1.14.0
+scikit-learn>=1.5.1
+sentence-transformers>=3.0.1
+# graphrag==0.3.2
