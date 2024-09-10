@@ -13,7 +13,6 @@ import os
 import sys
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
-from langchain_ollama.chat_models import ChatOllama
 from typing import List, Tuple, Dict
 from nltk.stem import WordNetLemmatizer
 from langchain_core.pydantic_v1 import BaseModel, Field
@@ -28,7 +27,6 @@ import numpy as np
 from streamlit_chat import message
 from spacy.cli import download
 import tempfile
-from langchain_ollama import OllamaEmbeddings
 # os.environ["OPENAI_API_KEY"] = "api"
 
 sys.path.append(os.path.abspath(os.path.join(os.getcwd(), '..'))) # Add the parent directory to the path sicnce we work with notebooks
