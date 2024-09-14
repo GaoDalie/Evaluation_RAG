@@ -15,16 +15,31 @@ from langchain_community.document_loaders import PyPDFLoader
 from langchain_community.vectorstores import Chroma
 from langchain_text_splitters import TokenTextSplitter
 import streamlit as st
+<<<<<<< HEAD
 from langchain_community.tools.tavily_search import TavilySearchResults
+=======
+>>>>>>> origin/main
 
 EMBEDDING_MODEL = "text-embedding-3-small"
 TOP_K = 5
 MAX_DOCS_FOR_CONTEXT = 8
+<<<<<<< HEAD
 DOCUMENT_PDF = "Transformer Explainer (1).pdf"
 
 os.environ["TAVILY_API_KEY"] = ""
 
 os.environ["OPENAI_API_KEY"] = ""
+=======
+DOCUMENT_PDF = "2402.03367v2.pdf"
+
+
+st.title("Multi-PDF ChatBot using LLAMA3 & Adaptive RAG")
+user_input = st.text_input("Question:", placeholder="Ask about your PDF", key='input')
+
+with st.sidebar:
+    uploaded_files = st.file_uploader("Upload your file", type=['pdf'], accept_multiple_files=True)
+    process = st.button("Process")
+>>>>>>> origin/main
 
 class GraphState(TypedDict):
     llm_opus: ChatOpenAI # Claude 3 "Haiku" model
@@ -84,6 +99,7 @@ def generate_query(state:GraphState) -> GraphState:
 def retrieve(state:GraphState) -> GraphState:
     print("--- retrieve ---")
     print(state)
+<<<<<<< HEAD
     emb_model = state.get('emb_model')
     if emb_model is None:
          print("Error: 'emb_model' key not found in the state") 
@@ -91,6 +107,12 @@ def retrieve(state:GraphState) -> GraphState:
     raw_documents = PyPDFLoader(DOCUMENT_PDF).load()
     # Define chunking strategy
     print(raw_documents)
+=======
+    emb_model = state['emb_model']   
+    generate_querys = state["generate_querys"]
+    raw_documents = PyPDFLoader(DOCUMENT_PDF).load()
+    # Define chunking strategy
+>>>>>>> origin/main
     text_splitter = TokenTextSplitter(chunk_size=2048, chunk_overlap=24)
     # Split the documents
     documents = text_splitter.split_documents(raw_documents)
@@ -224,7 +246,11 @@ def web_search(state):
     print("--- web_search ---")
     transform_question = state["transform_question"]
     documents = state["documents"]
+<<<<<<< HEAD
     retriever = TavilySearchResults()
+=======
+    retriever = SearchApiAPIWrapper()
+>>>>>>> origin/main
     docs = retriever.run(transform_question)
     documents.extend(docs)
     
@@ -300,6 +326,7 @@ def get_compile_graph():
     
     return compile_graph
 
+<<<<<<< HEAD
 # if process:
 
 llm_opus = ChatOpenAI(model_name="gpt-4o")
@@ -328,5 +355,35 @@ output = compile_graph.invoke(
 
 print("output:")
 print(output["messages"][-1].content)
+=======
+if process:
+
+    llm_opus = ChatOpenAI(model_name="gpt-4o")
+
+    emb_model =OpenAIEmbeddings(model="text-embedding-3-small")
+
+    compile_graph = get_compile_graph()
+    print(compile_graph)
+    # Ensure that the key 'GPT-4o' is added to the state dictionary
+    # Simplified state dictionary
+    state = {
+        "llm_opus": llm_opus,  # Renamed the key to match the input structure
+        "question": "What is Rag Fusion", 
+        "generate_query_num": 2
+    }
+
+    print("State dictionary before invoking compile_graph:", state)
+    # Invoke the graph with explicit parameters
+    output = compile_graph.invoke(
+        input={
+            "llm_opus": state["llm_opus"],
+            "question": state["question"],
+            "generate_query_num": state["generate_query_num"],
+        }
+    )
+    
+    st.write("output:")
+    st.write(output["messages"][-1].content)
+>>>>>>> origin/main
    
 
