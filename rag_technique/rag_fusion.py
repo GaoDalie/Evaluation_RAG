@@ -21,20 +21,14 @@ from langchain_text_splitters import TokenTextSplitter
 LLM_MODEL_OPENAI = "gpt-4o"
 EMBEDDING_MODEL = "text-embedding-3-small"
 
-# argparse
-parser = argparse.ArgumentParser()
-parser.add_argument('-q', '--query', help='Query with RRF search')
-parser.add_argument('-r', '--retriever', help='Retrieve with RRF retriever')
-parser.add_argument('-v', '--vector', help='Query with vector search')
-
 # Retriever options
 TOP_K = 5
 MAX_DOCS_FOR_CONTEXT = 8
-DOCUMENT_PDF = "2402.03367v2.pdf"
+DOCUMENT_PDF = "Transformer Explainer (1).pdf"
+
 
 # .env
-os.environ['OPENAI_API_KEY'] = 'Your_API_KEY'
-
+os.environ['OPENAI_API_KEY'] = ''
 
 my_template_prompt = """Please answer the [question] using only the following [information]. If there is no [information] available to answer the question, do not force an answer.
 
@@ -144,7 +138,7 @@ def query_generator(original_query: dict) -> list[str]:
     # prompt for query generator
     prompt = ChatPromptTemplate.from_messages([
         ("system", "You are a helpful assistant that generates multiple search queries based on a single input query."),
-        ("user", "Generate multiple search queries related to:  {original_query}. When creating queries, please refine or add closely related contextual information in Japanese, without significantly altering the original query's meaning"),
+        ("user", "Generate multiple search queries related to:  {original_query}. When creating queries, please refine or add closely related contextual information in English, without significantly altering the original query's meaning"),
         ("user", "OUTPUT (3 queries):")
     ])
 
@@ -232,41 +226,27 @@ def query(query: str, retriever: BaseRetriever):
 
     return result
 
-# main
 def main():
-
     # OpenAI API KEY
     if os.environ.get("OPENAI_API_KEY") == "":
         print("`OPENAI_API_KEY` is not set", file=sys.stderr)
         sys.exit(1)
 
-    # args
-    args = parser.parse_args()
+    # args (if you need them)
+    # args = parser.parse_args()
 
-    # retriever
+    # Define the query
+    query_text = 'what is ragchecker'
+
+    # Create retriever
     retriever = RunnableLambda(rrf_retriever)
 
-    # query
-    if args.query:
-        retriever = RunnableLambda(rrf_retriever)
-        result = query(args.query, retriever)
-    elif args.retriever:
-        retriever = RunnableLambda(rrf_retriever)
-        result = rrf_retriever(args.retriever)
-        sys.exit(0)
-    elif args.vector:
-        retriever = create_retriever(
-            search_type="similarity",
-            kwargs={"k": MAX_DOCS_FOR_CONTEXT}
-        )
-        result = query(args.vector, retriever)
-    else:
-        sys.exit(0)
+    # Call the query function
+    result = query(query_text, retriever)
 
-    # print answer
+    # Print answer
     print('---\nAnswer:')
     print(result['response'])
-
 
 if __name__ == '__main__':
     main()
